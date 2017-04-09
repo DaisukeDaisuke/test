@@ -117,11 +117,12 @@ class item_undo extends PluginBase implements Listener{
 //↓真夏の夜の淫夢にに対する抗体(完全にネタ要素)、嫌ならコメントアウトして、どうぞ。
 $this->test($params[0],$sender);
 
-if($params[0] < -1 ||$params[0] > 10 || strpos($params[0],'\x00') !== false || strpos($params[0],'\0') !== false){
 	if($params[0] == "u"){
 		$this->unset($sender);
 		break;
 	}
+
+if($params[0] < -1 ||$params[0] > 10 || strpos($params[0],'\x00') !== false || strpos($params[0],'\0') !== false){
 $this->item_map($sender);
 break;
 }
