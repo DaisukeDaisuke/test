@@ -1,0 +1,12 @@
+name: item_undo
+main: item_undo\item_undo
+version: 1.0.0
+api: [1.0.0]
+load: POSTWORLD
+commands:
+ drop:
+  description: Throw items away
+  usage: "/drop [unset|u] : アイテムを消去"
+ undo:
+  description: Restore items
+  usage: "/cut : <番号>"
