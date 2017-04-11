@@ -169,8 +169,6 @@ $this->tmp[$player->getName()] = $customname;
 	public function Erase_item($player){
 		$name = $player->getName();
 		$item = $player->getInventory()->getItemInHand();
-		$this->items[$name][] = ["expiration_date" => microtime(true),"backupitem" => $item];//bcadd(microtime(true),30,4)
-			//名前、メインデータ
 		$itemid = $item->getID();
 		/*if(isset($this->tmp[$name]) === true){
 			if($this->tmp[$name] !== $item->getName()){
@@ -189,11 +187,21 @@ $this->tmp[$player->getName()] = $customname;
 			$this->items[$name] = array_values($this->items[$name]);
 		}
 		//ガチャ.phpより
-		$item1 = Item::get(0,0,0);
-		$player->getInventory()->setItemInHand($item1);//アイテム上書き
-		$player->getInventory()->sendContents($player);//アイテムスロット更新!!
 		$customname =  $item->getName();
-		$player->sendMessage("${customname}を§e削除§rしました。\n §eあやまって捨てたとき§rは、§d1分以内§rに§d/undo 0§rをしてください。");
+		//$nowcount = $item->getCount();
+		$item1 = Item::get(0,0,0);
+		$isSneaking=$player->isSneaking();
+		//$item1->setCount($nowcount-1);
+			
+		
+		$this->items[$name][] = ["expiration_date" => microtime(true),"backupitem" => $item,"sneak" => $isSneaking];
+		/*if($isSneaking === true){
+			$item1=$item->getCount($nowcount-1);
+			$player->getInventory()->setItemInHand($item1);//スニーク時のイベント
+		}else*/
+		$player->getInventory()->setItemInHand($item1);
+		$player->getInventory()->sendContents($player);//アイテムスロット更新!!
+		$player->sendMessage("${customname}を§e削除§rしました。\n§eあやまって捨てたとき§rは、§d1分以内§rに§d/undo 0§rをしてください。");
 	}
 	public function item_map($player){
 		$name = $player->getName();
@@ -201,12 +209,17 @@ $this->tmp[$player->getName()] = $customname;
 			$player->sendMessage("読み込んでいます....");
 			$return = "";
 			foreach($this->items[$name] as $key => $date){//
-				$return = $return.":/undo ${key} , 名前::".$date["backupitem"]->getName()."\n";
+				/*$itemcount=0;
+				if($date["sneak"] === true){
+					$itemcount = 1;
+				}else{
+					$itemcount = $date["backupitem"]->getcount();
+				}*/
+				$return = $return.":/undo ${key} , 名前::".$date["backupitem"]->getName()."\n";//."個数::".$itemcount
 			}
 			$message = "${return}復元は/undo 番号 をしてください。";
-			//ここも関数化したいですね...
 			if(isset($this->cleanertime) === true){
-				$time_1= microtime(true)-$this->cleanertime;//xx.xxxx
+				$time_1= microtime(true)-$this->cleanertime;
 				$time_0=bcdiv($time_1,60,0);//分
 				$remainder = $time_1 % 60;//秒
 				$message1 = "次回のクリーナー実行から:";
@@ -217,14 +230,14 @@ $this->tmp[$player->getName()] = $customname;
 			}else $player->sendMessage($message);
 		}else $player->sendMessage("表示出来るものは何もありません！\n§lアイテムを捨てる§rには §d/drop u§r や所定のブロックをタップ！");
 	}
-	public function cleaner(){//メモリ解放(解放出来るものは全て)
+	public function cleaner(){//メモリ解放
 		$this->islock = true;
 		$nowtime = microtime(true);
 		foreach($this->items as $key => $date){//
 			foreach($date as $key1 => $date1){//
-				if($this->items[$key][$key1]["expiration_date"]-$nowtime < -60){//
+				if($this->items[$key][$key1]["expiration_date"]-$nowtime < -60){
 					unset($this->items[$key][$key1]);
-				}//30秒以上
+				}//1分以上
 			}
 		}
 		$this->items = array_values($this->items);
@@ -235,43 +248,26 @@ $this->tmp[$player->getName()] = $customname;
 	$name = $player->getName();
 		if(isset($this->items[$name][$no]) === true){
 			if($player->getInventory()->canAddItem($this->items[$name][$no]["backupitem"])){
+				/*$itemcount=0;
+				if($this->items[$name][$no]["sneak"] === true){
+					$itemcount = 1;
+				}
+				if($itemcount !== 0){
+					$player->getInventory()->addItem($this->items[$name][$no]["backupitem"]->setCount($itemcount));
+				}else*/
 				$player->getInventory()->addItem($this->items[$name][$no]["backupitem"]);
+				
 				unset($this->items[$name][$no]);//無限増殖防止コード
 				$this->items[$name] = array_values($this->items[$name]);//無限増殖防止コード
 			}else{
-				$this->items[$name][$no]["expiration_date"] = bcadd($this->items[$name][$no]["expiration_date"],15,4);
-$player->sendMessage("§eインベントリ§rに§e空き§rがありません。要求された§eアイテム§rの§a有効期限を15秒§r伸ばしました。");
+				$this->items[$name][$no]["expiration_date"] = bcadd($this->items[$name][$no]["expiration_date"],15,4);//バグ...
+				$player->sendMessage("§eインベントリ§rに§e空き§rがありません。要求された§eアイテム§rの§a有効期限を15秒§r伸ばしました。");
 			}
 		}else{
 			$player->sendMessage("指定した番号は存在しません。");
 			$this->item_map($player);
 		} 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//↓準下ネタ注意(114514等)
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
