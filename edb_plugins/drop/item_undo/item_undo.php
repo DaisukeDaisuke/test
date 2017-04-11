@@ -37,20 +37,9 @@ class item_undo extends PluginBase implements Listener{
 	public $_time = 3;//(分) クリーナーを実行する間隔
 	//設定
 	//メモリ削減の為、定期的にメモリ解放を行う(3分/1回)
-	//行わなかった場合は、再起動まで多くのメモリ使用。
-	//行った場合は3分に1回CPU使用。
 	public $release = true;
 	
-	//このプラグインのコマンドをユーザーが実行したときにコマンド処理と同時にメモリ解放を行う
-	public $Advanced_release = false;//準備中(めんdなんて言わせない。)
-	
 	public function onEnable(){
-	//$mine = Server::getInstance()->getPluginManager()->getPlugin("drop");
-	/*if(!file_exists($dataFolder)){
-		mkdir($dataFolder, 0744, true);
-	}*/
-		//$this->settings = new Config($dataFolder."settings.yml", Config::YAML);
-		//$this->id = $this->settings->get("block_id");
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		if($this->release === true){
 			$this->getLogger()->info("start cleaner....");
@@ -60,22 +49,6 @@ class item_undo extends PluginBase implements Listener{
 		}
 		
 	}
-	/*public function pd(dropevent $event){
-		$player = $event->getPlayer();
-		$name = $player->getName();
-		if(isset($permission[$name]) === false){
-			return;
-			//初めての要求 or 設定されていない。
-		}
-		if($permission[$name] === true){
-			$item = $event->getItem();
-			$event->setCancelled();
-			//$player->getInventory()->getItemInHand()->getID();
-			if($player->getInventory()->contains($item)){
-				$player->getInventory()->addItem($item);////
-			}
-		}
-	}*/
 	
 	public function onCommand(CommandSender $sender, Command $command, $label, array $params){
 		$user = $sender->getName();
@@ -163,12 +136,10 @@ break;
 			$st = $this->times[$name]-$nowtime;
 			if($st < -1){//1秒以上 <
 				if($st < -20){//3秒以上>
-					//$this->times[$name]=$nowtime;
 					$this->help_item($player);
 					return;
 				}
 			//1秒以上3秒未満の場合
-			//$player->sendMessage("メッセージ");
 			$this->Erase_item($player);
 			unset($this->times[$name]);
 			}else{
@@ -201,12 +172,14 @@ $this->tmp[$player->getName()] = $customname;
 		$this->items[$name][] = ["expiration_date" => microtime(true),"backupitem" => $item];//bcadd(microtime(true),30,4)
 			//名前、メインデータ
 		$itemid = $item->getID();
-		if(isset($this->tmp[$name]) === true){
+		/*if(isset($this->tmp[$name]) === true){
 			if($this->tmp[$name] !== $item->getName()){
-				
+				$this->help_item($player);
+				$this->times[$name]=microtime(true);
+				unset($this->tmp[$name]);
 				return;
 			}
-		}
+		}*/
 		if($itemid === 0){
 			$player->sendMessage("要求されたアイテムは無効アイテムです。");
 			return;
@@ -231,24 +204,25 @@ $this->tmp[$player->getName()] = $customname;
 				$return = $return.":/undo ${key} , 名前::".$date["backupitem"]->getName()."\n";
 			}
 			$message = "${return}復元は/undo 番号 をしてください。";
+			//ここも関数化したいですね...
 			if(isset($this->cleanertime) === true){
-				$time_1= microtime(true)-$this->cleanertime;
-				$time_0=bcdiv($time_1,60,0);
-				$remainder = $time_1 % 60;
+				$time_1= microtime(true)-$this->cleanertime;//xx.xxxx
+				$time_0=bcdiv($time_1,60,0);//分
+				$remainder = $time_1 % 60;//秒
+				$message1 = "次回のクリーナー実行から:";
+				$message2 = "${message}\n${message1}";
 				if($time_1 > 60){
-					$player->sendMessage("${message}\n次回のクリーナー実行:${time_0}分${remainder}秒");
-				}else $player->sendMessage("${message}\n前回のクリーナー実行:${time_0}秒");
+					$player->sendMessage("${message2}${time_0}分${remainder}秒");
+				}else $player->sendMessage("${$message2}:${remainder}秒");
 			}else $player->sendMessage($message);
 		}else $player->sendMessage("表示出来るものは何もありません！\n§lアイテムを捨てる§rには §d/drop u§r や所定のブロックをタップ！");
 	}
 	public function cleaner(){//メモリ解放(解放出来るものは全て)
-		$this->getLogger()->info("クリーナーだよ!!!!");
 		$this->islock = true;
 		$nowtime = microtime(true);
 		foreach($this->items as $key => $date){//
 			foreach($date as $key1 => $date1){//
 				if($this->items[$key][$key1]["expiration_date"]-$nowtime < -60){//
-	$this->getLogger()->info($this->items[$key][$key1]["expiration_date"]-$nowtime);
 					unset($this->items[$key][$key1]);
 				}//30秒以上
 			}
@@ -264,7 +238,6 @@ $this->tmp[$player->getName()] = $customname;
 				$player->getInventory()->addItem($this->items[$name][$no]["backupitem"]);
 				unset($this->items[$name][$no]);//無限増殖防止コード
 				$this->items[$name] = array_values($this->items[$name]);//無限増殖防止コード
-				//無限増殖防止コードは消さないください(´・ω・｀)
 			}else{
 				$this->items[$name][$no]["expiration_date"] = bcadd($this->items[$name][$no]["expiration_date"],15,4);
 $player->sendMessage("§eインベントリ§rに§e空き§rがありません。要求された§eアイテム§rの§a有効期限を15秒§r伸ばしました。");
@@ -311,27 +284,20 @@ $player->sendMessage("§eインベントリ§rに§e空き§rがありません�
 	
 	public function test($no,$player){
 		switch($no){
-			case "114514":
-			case "810":
-			case "1919":
 			case 114514:
 			case 810:
 			case 1919:
 				$player->sendMessage("[???] 心が濁ってますねぇ...");
 			break;
-		
-			case "4545":
-			case "0712":
+			
 			case 4545:
 			case 0712:
 				$player->sendMessage("[???] banされたいの...かな？(なおbanしない模様)");
 			break;
 			
-			case "889464":
 			case 889464:
 				$player->sendMessage("[???] ないです");
 			break;
-			case "334":
 			case 334:
 				$player->sendMessage("[???] 何でや阪神関係ないやろ(なお本当に関係ない模様)");
 			break;
@@ -353,9 +319,7 @@ class Tick_cleaner extends PluginTask{
 	}
 
 	public function onRun($currentTick){
-		//$owner = new item_undo();
 		$this->owner->cleaner();
-		//$owner->getLogger()->info("クリーナーだよ！！！！！");
 	}
 }
 
