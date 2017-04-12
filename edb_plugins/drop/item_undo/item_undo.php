@@ -109,10 +109,6 @@ break;
 	return true;
 	}
 	
-	/*public function onBlockTap(InteractEvent $event){
-		
-	}*/
-	
 	
 	public function help($player){
 		$state = "off";
@@ -134,8 +130,8 @@ break;
 		$nowtime=microtime(true);
 		if(isset($this->times[$name]) === true){
 			$st = $this->times[$name]-$nowtime;
-			if($st < -1){//1秒以上 <
-				if($st < -20){//3秒以上>
+			if($st < -1){//1秒以上
+				if($st < -20){//3秒以上
 					$this->help_item($player);
 					return;
 				}
@@ -170,14 +166,6 @@ $this->tmp[$player->getName()] = $customname;
 		$name = $player->getName();
 		$item = $player->getInventory()->getItemInHand();
 		$itemid = $item->getID();
-		/*if(isset($this->tmp[$name]) === true){
-			if($this->tmp[$name] !== $item->getName()){
-				$this->help_item($player);
-				$this->times[$name]=microtime(true);
-				unset($this->tmp[$name]);
-				return;
-			}
-		}*/
 		if($itemid === 0){
 			$player->sendMessage("要求されたアイテムは無効アイテムです。");
 			return;
@@ -188,17 +176,8 @@ $this->tmp[$player->getName()] = $customname;
 		}
 		//ガチャ.phpより
 		$customname =  $item->getName();
-		//$nowcount = $item->getCount();
 		$item1 = Item::get(0,0,0);
-		$isSneaking=$player->isSneaking();
-		//$item1->setCount($nowcount-1);
-			
-		
-		$this->items[$name][] = ["expiration_date" => microtime(true),"backupitem" => $item,"sneak" => $isSneaking];
-		/*if($isSneaking === true){
-			$item1=$item->getCount($nowcount-1);
-			$player->getInventory()->setItemInHand($item1);//スニーク時のイベント
-		}else*/
+		$this->items[$name][] = ["expiration_date" => microtime(true),"backupitem" => $item];
 		$player->getInventory()->setItemInHand($item1);
 		$player->getInventory()->sendContents($player);//アイテムスロット更新!!
 		$player->sendMessage("${customname}を§e削除§rしました。\n§eあやまって捨てたとき§rは、§d1分以内§rに§d/undo 0§rをしてください。");
@@ -208,13 +187,7 @@ $this->tmp[$player->getName()] = $customname;
 		if(isset($this->items[$name]) === true){
 			$player->sendMessage("読み込んでいます....");
 			$return = "";
-			foreach($this->items[$name] as $key => $date){//
-				/*$itemcount=0;
-				if($date["sneak"] === true){
-					$itemcount = 1;
-				}else{
-					$itemcount = $date["backupitem"]->getcount();
-				}*/
+			foreach($this->items[$name] as $key => $date){
 				$return = $return.":/undo ${key} , 名前::".$date["backupitem"]->getName()."\n";//."個数::".$itemcount
 			}
 			$message = "${return}復元は/undo 番号 をしてください。";
