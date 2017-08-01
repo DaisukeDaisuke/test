@@ -14,7 +14,7 @@ if (empty($_FILES['imagefile']['tmp_name']) && (empty($argv[1]))) {
      マージン: <input name="margin" value="1" type="text"/> <br />-->
      <input type="submit" value="ファイルを送信" />
 <p> 小さい画像を入れてね (はーと) </p><br />
-<a href = "http://192.168.0.14:8080/colorgui.php">戻る</a>
+<a href = "http://192.168.0.14:8080/cs.php">戻る</a>
 </form>
 <?php
                 
