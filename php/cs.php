@@ -23,6 +23,7 @@ if (empty($_FILES['imagefile']['tmp_name']) && (empty($argv[1]))) {
 $time_setup = microtime(true);
 error_reporting(E_ALL);
 ini_set('memory_limit', '1000M');
+set_time_limit(0);
 if (isset($_FILES['imagefile']['tmp_name'])) {
     $imagefile = $_FILES['imagefile']['tmp_name'];
 } else {
@@ -126,21 +127,87 @@ $jsoncolor = json_decode(base64_decode('W1sxOTAsNjksMTgwXSxbMTEyLDE4NSwyNl0sWzEx
 
 
 $correctioncolor = json_decode(base64_decode('W1sxMTIsMTg1LDI2LDM1LDVdLFsxMTQsNzIsNDEsMzUsMTJdLFsyMzgsMTQxLDE3MiwzNSw2XSxbMTQyLDE0MiwxMzUsMzUsOF0sWzI0OSwxOTgsNDAsMzUsNF0sWzIzNCwyMzYsMjM3LDM1LDBdLFs4NSwxMTAsMjgsMzUsMTNdLFsxMjIsNDIsMTczLDM1LDEwXSxbMjEsMTM4LDE0NSwzNSw5XSxbMTY5LDg4LDMzLDEyLDFdLFsyMzYsMjMzLDIyNiwxNTUsMF0sWzEwNCw3OCw0Nyw1LDFdLFsxOTYsMTc5LDEyMyw1LDJdLFsyMTksMjExLDE2MCwxMiwwXSxbOTgsMjE5LDIxNCw1NywwXSxbMTU0LDExMCw3Nyw1LDNdLFsyMTksMjE5LDIxOSw0MiwwXSxbMTkwLDY5LDE4MCwzNSwyXSxbNjEsNDAsMTgsNSw1XSxbMTYxLDM5LDM1LDM1LDE0XSxbNzQsMTgxLDIxMywyMzcsM10sWzEzMiw1NiwxNzgsMjM3LDEwXSxbMTA0LDExOCw1MywxNTksNV0sWzE0Myw2MSw0NywxNTksMTRdLFs3Nyw1MSwzNiwxNTksMTJdLFs3Niw4Myw0MiwxNTksMTNdLFsxMTgsNzAsODYsMTU5LDEwXSxbMzcsMjMsMTYsMTU5LDE1XSxbNTgsNDIsMzYsMTU5LDddLFs4Nyw5MSw5MSwxNTksOV0sWzk0LDE2OSwyNSwyMzYsNV0sWzIxLDExOSwxMzYsMjM2LDldLFsxNjksNDgsMTU5LDIzNiwyXSxbMTksMTksMTksMTczLDBdLFsxNjksOTIsNTEsNSw0XSxbMjQ5LDIzNiw3OSw0MSwwXSxbNzQsNjAsOTEsMTU5LDExXSxbNDUsNDcsMTQzLDIzNiwxMV0sWzk2LDYwLDMyLDIzNiwxMl0sWzEzNSwxMDcsOTgsMTU5LDhdLFsxNjIsNzgsNzksMTU5LDZdLFs3Myw5MSwzNiwyMzYsMTNdLFs4LDEwLDE1LDIzNiwxNV0sWzIxMCwxNzgsMTYxLDE1OSwwXSxbMTU3LDEyOCw3OSw1LDBdLFszOSw2NywxMzgsMjIsMF0sWzE1OSwxNjQsMTc3LDgyLDBdLFsxMTMsMTA5LDEzOCwxNTksM10sWzIzMywxOTksNTUsMjM3LDRdLFsxNjIsODQsMzgsMTU5LDFdLFs3MCw3MywxNjcsMjM3LDExXSxbMjE0LDEwMSwxNDMsMjM2LDZdLFsxOTMsODQsMTg1LDIzNywyXSxbMjI3LDEzMiwzMiwyMzcsMV0sWzM2LDEzNywxOTksMjM2LDNdLFsxMDAsMzIsMTU2LDIzNiwxMF0sWzEyNiw4NSw1NCwyMzcsMTJdLFs3Nyw4MSw4NSwyMzcsN10sWzIyNiwyMjcsMjI4LDIzNywwXSxbMjI5LDE1MywxODEsMjM3LDZdLFsxNTUsMTU1LDE0OCwyMzcsOF0sWzI0MSwxNzUsMjEsMjM2LDRdLFs1NSw1OCw2MiwyMzYsN10sWzk3LDExOSw0NSwyMzcsMTNdLFsxNjgsNTQsNTEsMjM3LDE0XSxbMjA3LDIxMywyMTQsMjM2LDBdLFsxMjUsMTg5LDQyLDIzNyw1XSxbMjUsMjcsMzIsMjM3LDE1XSxbMTUwLDg4LDEwOSwxNTksMl0sWzM3LDE0OCwxNTcsMjM3LDldLFsyMjQsOTcsMSwyMzYsMV0sWzE0MiwzMywzMywyMzYsMTRdLFsxMjUsMTI1LDExNSwyMzYsOF0sWzIxLDIxLDI2LDM1LDE1XSxbMTI1LDEyNSwxMjUsMSwwXSxbMTgzLDE4MywxODYsMSw0XSxbMTU5LDExNSw5OCwxLDJdLFsyNDEsMTE4LDIwLDM1LDFdLFs1OCwxNzUsMjE3LDM1LDNdLFs2Myw2OCw3MiwzNSw3XSxbNTMsNTcsMTU3LDM1LDExXSxbMTMzLDEzMywxMzUsMSw2XV0='), true);
-//var_dump($correctioncolor);
-/*if(isset($_POST['food']) && is_array($_POST['food'])) {
-    $food = $_POST["food"];
-}
-var_dump($food);*/
-//$info = true;
-//$info = false;
-$info = true;
-//RAMを上手く利用して高速化する
-//情報を集計しながら変換する
 
-//$info1 = true;
-$info1 = false;
-//RAMを上手く利用して高速化する
-//$infoがfalseである必要がある
+$plus_color = array (
+  0 => 
+  array (
+    0 => 72,
+    1 => 154,
+    2 => 94,
+  ),
+  1 => 
+  array (
+    0 => 163,
+    1 => 51,
+    2 => 64,
+  ),
+  2 => 
+  array (
+    0 => 53,
+    1 => 82,
+    2 => 149,
+  ),
+  3 => 
+  array (
+    0 => 156,
+    1 => 127,
+    2 => 128,
+  ),
+  4 => 
+  array (
+    0 => 170,
+    1 => 110,
+    2 => 59,
+  ),
+  5 => 
+  array (
+    0 => 163,
+    1 => 161,
+    2 => 77,
+  ),
+  6 => 
+  array (
+    0 => 127,
+    1 => 75,
+    2 => 121,
+  ),
+  7 => 
+  array (
+    0 => 76,
+    1 => 130,
+    2 => 168,
+  ),
+  8 => 
+  array (
+    0 => 54,
+    1 => 54,
+    2 => 61,
+  ),
+  9 => 
+  array (
+    0 => 149,
+    1 => 103,
+    2 => 137,
+  ),
+  10 => 
+  array (
+    0 => 56,
+    1 => 101,
+    2 => 73,
+  ),
+  11 => 
+  array (
+    0 => 127,
+    1 => 78,
+    2 => 73,
+  ),
+  12 => 
+  array (
+    0 => 221,
+    1 => 221,
+    2 => 221,
+  ),
+);
 
 $use_mapcolor = false;
 //trueにすると多くの色を使います。
@@ -149,9 +216,13 @@ $use_jsoncolor = false;
 //trueにするともっと多くの色を使います
 $ues_correctioncolor = true;
 //↑の修正版を利用します
+
+$use_plus_color = false;
+
 if($use_mapcolor) $woolColors = $BaseMapColors;
 if($use_jsoncolor) $woolColors = $jsoncolor;
 if($ues_correctioncolor) $woolColors = $correctioncolor;
+if($use_plus_color) $woolColors = $plus_color;
 unset($BaseMapColors);
 unset($jsoncolor);
 unset($correctioncolor);
@@ -161,80 +232,49 @@ $setup = microtime(true) - $time_setup;
 
 $width  = imagesx($im);
 $height = imagesy($im);
-set_time_limit(180);
 $im2 = imagecreatetruecolor($width,$height);
 /*
-$out = ImageCreateTrueColor($width/2, $height/2);
-ImageCopyResampled($out, $im,0,0,0,0, $width/2, $height/2, $width, $height);
+$out = ImageCreateTrueColor($width/4, $height/4);
+ImageCopyResampled($out, $im,0,0,0,0, $width/4, $height/4, $width, $height);
 $im = $out;
 $width  = imagesx($im);
 $height = imagesy($im);
 
 $im2 = imagecreatetruecolor($width,$height);
 */
-/*$sqrt = new SplFixedArray(195076);
-for($y = 0 ; $y <  195076; $y++){
-	$sqrt[$y] = sqrt($y);
-}*/
-//$test = 0;
+$time_get = microtime(true);
+
 $cash = [];
+$cash1 = [];
+foreach($woolColors as $colors)
+	$cash1[] = getimagecoloralpha($im2,$colors[0],$colors[1],$colors[2],0);
+echo "woolcolor array ".(microtime(true) - $time_get)."<br />";
+
+$time_loop = microtime(true);
 for ($y = 0 ; $y < $height ; ++$y){
     for ($x = 0 ; $x < $width ; ++$x){
-	$color = imagecolorat($im, $x, $y);
-	$rgb = imagecolorsforindex($im, $color);
+	$data = imagecolorat($im,$x,$y);
+	$r = ($data >> 16) & 0xFF;
+	$g = ($data >> 8) & 0xFF;
+	$b = $data & 0xFF;
 	$selectedColor = 0;
-	$minDist = null;
-	$rgds = $rgb["red"].",".$rgb["green"].",".$rgb["blue"];
-	//$rgds = (int) "1".$rgb["red"]."0".$rgb["green"]."0".$rgb["blue"];
-	if($info){
-		if(isset($cash[$rgds])){
-			$selectedColor = $cash[$rgds][0];
-			++$cash[$rgds][2];
+	$minDist = -1;
+		if(isset($cash[$data])){
+			$selectedColor = $cash[$data];
 		}else{
 			foreach($woolColors as $i => $woolcolor){
-				//$dist = color($woolcolor,$rgb);
-				//$dist = $sqrt[($rgb["red"]-$woolcolor[0]) * ($rgb["red"]-$woolcolor[0]) + ($rgb["green"]-$woolcolor[1]) * ($rgb["green"]-$woolcolor[1]) + ($rgb["blue"]-$woolcolor[2]) * ($rgb["blue"]-$woolcolor[2])] / 1.73205080757;//sqrt使う場合
-				$dist = ($rgb["red"]-$woolcolor[0]) * ($rgb["red"]-$woolcolor[0]) + ($rgb["green"]-$woolcolor[1]) * ($rgb["green"]-$woolcolor[1]) + ($rgb["blue"]-$woolcolor[2]) * ($rgb["blue"]-$woolcolor[2]);//β
-				if($minDist ==  null||$minDist > $dist){
+				$dist = ($r-$woolcolor[0]) * ($r-$woolcolor[0]) + ($g-$woolcolor[1]) * ($g-$woolcolor[1]) + ($b-$woolcolor[2]) * ($b-$woolcolor[2]);
+				if($minDist === -1||$minDist > $dist){
 					$minDist = $dist;
 					$selectedColor = $i;
 				}
 			}
-			$cash[$rgds] = [$selectedColor,$minDist,1];
+			$cash[$data] = $selectedColor;
 		}
-	}else if($info1){
-	//計算除外
-		if(isset($cash[$rgds])){
-			$selectedColor = $cash[$rgds];
-		}else{
-			foreach($woolColors as $i => $woolcolor){
-				//$dist = $sqrt[($rgb["red"]-$woolcolor[0]) * ($rgb["red"]-$woolcolor[0]) + ($rgb["green"]-$woolcolor[1]) * ($rgb["green"]-$woolcolor[1]) + ($rgb["blue"]-$woolcolor[2]) * ($rgb["blue"]-$woolcolor[2])] / 1.73205080757;
-				$dist = ($rgb["red"]-$woolcolor[0]) * ($rgb["red"]-$woolcolor[0]) + ($rgb["green"]-$woolcolor[1]) * ($rgb["green"]-$woolcolor[1]) + ($rgb["blue"]-$woolcolor[2]) * ($rgb["blue"]-$woolcolor[2]);
-				if($minDist ==  null||$minDist > $dist){
-					$minDist = $dist;
-					$selectedColor = $i;
-				}
-			}
-			//$cash[$rgds] = [$selectedColor,$minDist,1];
-			$cash[$rgds] = $selectedColor;
-		}
-	
-	}else{
-		foreach($woolColors as $i => $woolcolor){
-			//$dist = $sqrt[($rgb["red"]-$woolcolor[0]) * ($rgb["red"]-$woolcolor[0]) + ($rgb["green"]-$woolcolor[1]) * ($rgb["green"]-$woolcolor[1]) + ($rgb["blue"]-$woolcolor[2]) * ($rgb["blue"]-$woolcolor[2])] / 1.73205080757;
-			$dist = ($rgb["red"]-$woolcolor[0]) * ($rgb["red"]-$woolcolor[0]) + ($rgb["green"]-$woolcolor[1]) * ($rgb["green"]-$woolcolor[1]) + ($rgb["blue"]-$woolcolor[2]) * ($rgb["blue"]-$woolcolor[2]);
-			if($minDist ==  null||$minDist > $dist){
-				$minDist = $dist;
-				$selectedColor = $i;
-			}
-		}
+		imagefilledrectangle($im2, $x, $y, $x, $y, $cash1[$selectedColor]);
 	}
-	$color2 = getimagecoloralpha($im2, $woolColors[$selectedColor][0], $woolColors[$selectedColor][1], $woolColors[$selectedColor][2],0);
-	//imagefilledrectangle($im2, $xx, $yy, $xx + $scale - $margin, $yy + $scale - $margin, $color2);
-		imagefilledrectangle($im2, $x, $y, $x, $y, $color2);
-    }
 }
-
+echo "loop".(microtime(true) - $time_loop)."<br />";
 ob_start();
 imagepng($im2);
 $content = base64_encode(ob_get_contents());
@@ -243,27 +283,7 @@ imagedestroy($im2);
 imagedestroy($im);
 $counts = [];
 echo "使用色数::".(count($woolColors)-1)."<br />";
-/*if($info&&!$info1){
-平均機能はいらない気がする
-$total = 0;
-$counts = 0;
-foreach($cash as $w){
-	$counts += ($w[1]*$w[2]);
-	$total += $w[2];
-}
-//var_dump($cash);
-//$head_count = (count($counts)-1); // 要素数を数えて、変数$head_countに代入。
-$average = $total / $counts; // 平均値を求めて、四捨五入する。
-print "<p>"."平均は".$average."です。"."</p>\n";
-//echo "<br /> ↑は低いほど画像が合っています";
-}*/
-//var_dump($test);
-echo "<br />準備::${setup}秒<br />";
-$time = microtime(true) - $time_start;
-$time1 = microtime(true) - $time_setup;
-echo "<br />処理::${time}秒<br />";
-echo "<br />合計::${time1}秒<br />";
-//data:image/jpeg;base64
-//var_dump($cash);
+$time = microtime(true) - $time_setup;
+echo "<br />${time}秒<br />";
 ?>
 <br /><br /><br /><br /><img src="data:image/png;base64,<?php echo $content;?>" alt="output" />
