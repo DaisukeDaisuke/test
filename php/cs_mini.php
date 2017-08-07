@@ -7,7 +7,7 @@ if(empty($_FILES['imagefile']['tmp_name']) && (empty($argv[1]))){
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body bgcolor="#f0ffff">
-<form enctype="multipart/form-data" action="cs.php?ext=.png" method="POST">
+<form enctype="multipart/form-data" action="cs_mini.php?ext=.png" method="POST">
      <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
       画像ファイル(GIF/PNG/JPEGをアップロード: <input name="imagefile" type="file" /><br />
      <input type="submit" value="ファイルを送信" />
