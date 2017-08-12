@@ -126,17 +126,4 @@ class dot extends PluginBase implements Listener{
 			$this->getLogger()->info($y);
 		}
 	}
-	/*public function autodot_run($data,$startx,$starty,$startz,$x,$y,$z,$getblock,$level){
-		if(isset($data[$y][$x+1])){
-			$level->setBlock(new Vector3($startx - ($x = $x+1),$starty - $y,$startz), $getblock[$data[$y][$x+1]]);
-		}else{
-			$level->setBlock(new Vector3($startx - ($x = 0),$starty - ($y = $y+1),$startz), $getblock[$data[(++$y)][0]]);
-			$this->getLogger()->info($y);
-		}
-		$this->getServer()->getScheduler()->scheduleDelayedTask(new CallbackTask(
-			[$this, "autodot_run"],
-			[$data,$startx,$starty,$startz,$x,$y,$z,$getblock,$level]
-		),1);
-		$this->autodot_run($data,$startx,$starty,$startz,$x,$y,$z,$getblock,$level);
-	}*/
 }
