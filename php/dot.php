@@ -119,14 +119,12 @@ class dot extends PluginBase implements Listener{
 	
 	}
 	public function autodot_run($data,$startx,$starty,$startz,$getblock,$level){
-		$vector = new Vector3(0, 0, 0);
+		$vector = new Vector3($startx, $starty, $startz);
 		foreach($data as $y => $data_y){
 			foreach($data_y as $x => $color){
-				$v = clone $vector;
-				$v->x = $startx - $x;
-				$v->y = $starty - $y;
-				$v->z = $startz;
-				$level->setBlock($v,$getblock[$color]);
+				$vector->x = $startx - $x;
+				$vector->y = $starty - $y;
+				$level->setBlock($vector, $getblock[$color], false, false);
 			}
 			//$this->getLogger()->info($y);
 		}
