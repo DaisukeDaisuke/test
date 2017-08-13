@@ -85,7 +85,7 @@ class dot extends PluginBase implements Listener{
 		$width  = imagesx($im);
 		$height = imagesy($im);
 		$this->getLogger()->info("たて".$width."よこ".$height);
-		$cash = [];
+		$cache = [];
 		$return = [];
 		for($y = 0 ; $y < $height ; $y++){
 			for($x = 0 ; $x < $width ; $x++){
@@ -93,10 +93,14 @@ class dot extends PluginBase implements Listener{
 				$r = ($data >> 16) & 0xFF;
 				$g = ($data >> 8) & 0xFF;
 				$b = $data & 0xFF;
+				
+				//$a = ($data & 0x7F000000) >> 24;
+				//if($a === 127) continue;//完全に透明の場合は無視
+				
 				$selectedColor = 0;
 				$minDist = -1;
-				if(isset($cash[$data])){
-					$selectedColor = $cash[$data];
+				if(isset($cache[$data])){
+					$selectedColor = $cache[$data];
 				}else{
 				 	foreach($woolColors as $i => $woolcolor){
 				 		$dist = ($r-$woolcolor[0]) * ($r-$woolcolor[0]) + ($g-$woolcolor[1]) * ($g-$woolcolor[1]) + ($b-$woolcolor[2]) * ($b-$woolcolor[2]);//β
@@ -105,11 +109,11 @@ class dot extends PluginBase implements Listener{
 				 			$selectedColor = $i;
 				 		}
 				 	}
-		 		 	$cash[$data] = $selectedColor;
+		 		 	$cache[$data] = $selectedColor;
 		 		}
 		 		$return[$y][] = $selectedColor;
 			}
-			$this->getLogger()->info($y);
+			//$this->getLogger()->info($y);
 		}
 	$this->getServer()->getScheduler()->scheduleDelayedTask(new CallbackTask(
 		[$this, "autodot_run"],
@@ -127,5 +131,6 @@ class dot extends PluginBase implements Listener{
 			}
 			//$this->getLogger()->info($y);
 		}
+		$this->getServer()->broadcastMessage("変更が終了しました。");
 	}
 }
