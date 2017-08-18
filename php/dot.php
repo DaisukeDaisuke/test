@@ -3,33 +3,19 @@
 namespace dot;
 
 use pocketmine\Server;
+use pocketmine\Player;
+use pocketmine\event\Listener;
+use pocketmine\plugin\PluginBase;
+
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\Player;
-use pocketmine\plugin\PluginBase;
-use pocketmine\entity\Entity;
-use pocketmine\event\server\ServerCommandEvent;
-use pocketmine\event\Listener;
-use pocketmine\event\server\DataPacketReceiveEvent;
-use pocketmine\network\protocol\UseItemPacket;
-use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\level\Level;
-use pocketmine\math\Vector3;
-use pocketmine\level\particle\RedstoneParticle;
-use pocketmine\level\particle\LargeExplodeParticle;
-use pocketmine\utils\Config;
-use pocketmine\level\particle\PortalParticle;
-use pocketmine\level\particle\DestroyBlockParticle;
-use pocketmine\level\particle\DustParticle;
-use pocketmine\level\sound\ExplodeSound;
-use pocketmine\block\Block;
-use pocketmine\level\Position;
-use pocketmine\level\Explosion;
-use pocketmine\scheduler\AsyncTask;
-use pocketmine\Thread;
 
+use pocketmine\level\Level;
+use pocketmine\level\Position;
+use pocketmine\block\Block;
+use pocketmine\entity\Entity;
+use pocketmine\math\Vector3;
+use pocketmine\utils\Config;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\scheduler\CallbackTask;
 
@@ -39,6 +25,7 @@ class dot extends PluginBase implements Listener{
 		if(!file_exists($this->getDataFolder())){
 			mkdir($this->getDataFolder(), 0744, true);
 		}
+		//phpinfo();
 	}
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args){
 		switch(strtolower($label)) {
@@ -69,6 +56,8 @@ class dot extends PluginBase implements Listener{
 						$this->getServer()->broadcastMessage("[auto_dot] 変更が終了しました。");
 					return true;
 					}
+					
+					
 				$this->autodot($im,$sender->getLevel(),$sender->x,$sender->y,$sender->z);
 				$this->getServer()->broadcastMessage("[auto_dot] 処理が終了しました。");
 				$this->getServer()->broadcastMessage("[auto_dot] 変更を開始します");
@@ -118,18 +107,17 @@ class dot extends PluginBase implements Listener{
 	$this->getServer()->getScheduler()->scheduleDelayedTask(new CallbackTask(
 		[$this, "autodot_run"],
 		[$return,$startx,$starty,$startz,$getblock,$level]
-	),10);//メッセージ送信
-	
+	),5);//メッセージ送信
+	//autodot_run($return,$startx,$starty,$startz,$getblock,$level);
 	}
 	public function autodot_run($data,$startx,$starty,$startz,$getblock,$level){
 		$vector = new Vector3($startx, $starty, $startz);
 		foreach($data as $y => $data_y){
 			foreach($data_y as $x => $color){
-				$vector->x = $startx - $x;
 				$vector->y = $starty - $y;
+				$vector->x = $startx - $x;
 				$level->setBlock($vector, $getblock[$color], false, false);
 			}
-			//$this->getLogger()->info($y);
 		}
 		$this->getServer()->broadcastMessage("変更が終了しました。");
 	}
