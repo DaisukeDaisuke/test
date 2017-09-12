@@ -108,7 +108,7 @@ class dot extends PluginBase implements Listener{
 		[$this, "autodot_run"],
 		[$return,$startx,$starty,$startz,$getblock,$level]
 	),5);//メッセージ送信
-	//autodot_run($return,$startx,$starty,$startz,$getblock,$level);
+	//$this->autodot_run($return,$startx,$starty,$startz,$getblock,$level);
 	}
 	public function autodot_run($data,$startx,$starty,$startz,$getblock,$level){
 		$vector = new Vector3($startx, $starty, $startz);
