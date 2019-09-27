@@ -52,7 +52,6 @@ class testplugin extends PluginBase implements Listener{
 		if($event->getPacket() instanceof ResourcePackStackPacket){
 			$event->getPacket()->isExperimental = $this->IsExperimentalGamePlay;
 			$event->getPacket()->behaviorPackStack = $this->ResourcePackManager->getResourceStack();
-			//var_dump($event->getPacket());
 		}else if($event->getPacket() instanceof ResourcePacksInfoPacket){
 			$event->getPacket()->behaviorPackEntries = $this->ResourcePackManager->getResourceStack();
 			$event->getPacket()->hasScripts = true;
@@ -89,11 +88,9 @@ class testplugin extends PluginBase implements Listener{
 						$event->getPlayer()->dataPacket($pk);
 						unset($event->getPacket()->packIds[$key]);
 					}
-					var_dump($event->getPacket()->packIds);
 				break;
 			}
 		}else if($event->getPacket() instanceof ResourcePackChunkRequestPacket){
-			var_dump($event->getPacket()->packId);
 			$packet = $event->getPacket();
 			$manager = $this->ResourcePackManager;
 			$pack = $manager->getPackById($packet->packId);
